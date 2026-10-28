@@ -1,0 +1,2120 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日光秋季之旅 · Nikko Autumn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: {
+                colors: { brand: { light:'#FAF9F6', dark:'#121212', accent:'#B33D18', muted:'#71717A' } },
+                fontFamily: { sans: ['Inter','-apple-system','BlinkMacSystemFont','"Segoe UI"', 'Roboto','sans-serif'] }
+            }}
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D4D4D8; border-radius: 20px; }
+        .dark ::-webkit-scrollbar-thumb { background: #3F3F46; }
+        body { -webkit-font-smoothing: antialiased; }
+        body { padding-bottom: 5.5rem; }
+        @media (min-width: 640px) { body { padding-bottom: 0; } }
+        .share-fab {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+            padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+            background: rgba(255,255,255,.96); border-top: 1px solid #e4e4e7;
+            display: flex; gap: 0.5rem;
+        }
+        .dark .share-fab { background: rgba(24,24,27,.96); border-top-color: #3f3f46; }
+        @media (min-width: 640px) {
+            .share-fab { position: static; padding: 0; border: 0; background: transparent; display: flex; }
+        }
+        .share-wa {
+            flex: 1; font-weight: 800; font-size: 0.95rem; color: #fff;
+            background: #25D366; border-radius: 0.85rem; padding: 0.85rem 1rem;
+            box-shadow: 0 2px 0 #128C7E;
+        }
+        .share-pdf {
+            flex: 1; font-weight: 800; font-size: 0.95rem; color: #9A3412;
+            background: #FFEDD5; border: 2px solid #EA580C; border-radius: 0.85rem; padding: 0.85rem 1rem;
+        }
+        @media print {
+            header, .share-fab, #searchInput, #themeToggle, .wx-refresh-btn, .jma-warn-btn { display: none !important; }
+            .tab-content { display: block !important; page-break-before: always; }
+            #content-hotels { page-break-before: auto !important; }
+            body { padding-bottom: 0 !important; background: #fff !important; }
+        }
+        html { scroll-behavior: smooth; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-scroll-wrap { display: flex; align-items: stretch; max-width: 48rem; margin: 0 auto; }
+        .tab-scroll-btn {
+            flex-shrink: 0; width: 2rem; display: flex; align-items: center; justify-content: center;
+            font-size: 1.15rem; font-weight: 800; color: #B33D18; background: transparent;
+            border: 0; cursor: pointer; line-height: 1;
+        }
+        .tab-scroll-btn:disabled { opacity: 0.25; cursor: default; }
+        .dark .tab-scroll-btn { color: #fb923c; }
+        #tabScroll {
+            overflow-x: auto; -webkit-overflow-scrolling: touch;
+            overscroll-behavior-x: contain; touch-action: pan-x;
+            scrollbar-width: thin;
+        }
+        .wx-hour-chip {
+            min-width: 4.6rem; flex-shrink: 0; text-align: center;
+            background: #fafafa; border: 1px solid #e4e4e7; border-radius: 0.85rem; padding: 0.55rem 0.35rem;
+        }
+        .dark .wx-hour-chip { background: #18181b; border-color: #3f3f46; }
+        .wx-hour-chip .wx-icon { width: 32px; height: 32px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.28s ease-out; }
+        .card-completed { opacity: 0.55; }
+        .card-completed .check-btn { background: #10b981 !important; color: white !important; border-color: #10b981 !important; }
+        .time-daytona {
+            font-family: 'Daytona','Oswald','Arial Narrow',sans-serif;
+            color: #0070C0 !important;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            font-size: 1.125rem;
+        }
+        .route-meta {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #BE5014;
+            font-family: 'Oswald','Arial Narrow',sans-serif;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            margin-bottom: 4px;
+        }
+        .route-track { display: flex; align-items: center; width: 100%; }
+        .route-shaft { flex: 1; height: 4px; background: #BE5014; }
+        .route-head {
+            width: 0; height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 10px solid #BE5014;
+        }
+        .route-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #BE5014; border: 2px solid #fff;
+            box-shadow: 0 0 0 1.5px #BE5014; flex-shrink: 0;
+        }
+        .dark .route-dot { border-color: #121212; }
+        .box-hotel { border-color: #A6C9EC !important; }
+        .hotel-date-badge {
+            display: inline-block; background: #A85618; color: #fff;
+            font-size: 0.95rem; font-weight: 700; letter-spacing: 0.02em;
+            padding: 0.3rem 0.7rem; border-radius: 0.5rem; line-height: 1.3;
+        }
+        .hotel-nights-num {
+            font-size: 1.75rem; font-weight: 800; color: #4F4FFF; line-height: 1;
+            font-family: 'Daytona','Oswald','Arial Narrow',sans-serif;
+        }
+        .hotel-nights-label { font-size: 0.7rem; font-weight: 600; color: #111; text-align: center; margin-top: 2px; }
+        .dark .hotel-nights-label { color: #e4e4e7; }
+        .booking-time-num {
+            font-size: 1.6rem; font-weight: 800; color: #1A5F7A; line-height: 1;
+            font-family: 'Daytona','Oswald','Arial Narrow',sans-serif;
+        }
+        .booking-time-label { font-size: 0.65rem; font-weight: 600; color: #111; text-align: center; margin-top: 3px; letter-spacing: 0.02em; }
+        .dark .booking-time-label { color: #e4e4e7; }
+        .booking-date-num {
+            font-size: 1.6rem; font-weight: 800; color: #920000; line-height: 1;
+            font-family: 'Daytona','Oswald','Arial Narrow',sans-serif;
+            text-align: center;
+        }
+        .booking-date-label { font-size: 0.65rem; font-weight: 600; color: #111; text-align: center; margin-top: 3px; letter-spacing: 0.02em; }
+        .dark .booking-date-label { color: #e4e4e7; }
+        .flight-iata {
+            font-size: 1.2rem; font-weight: 800; letter-spacing: 0.05em; line-height: 1.1;
+            font-family: 'Daytona','Oswald','Arial Narrow',sans-serif; color: #111;
+        }
+        .dark .flight-iata { color: #f4f4f5; }
+        .flight-city { font-size: 0.72rem; font-weight: 600; color: #52525b; line-height: 1.2; }
+        .dark .flight-city { color: #a1a1aa; }
+        .flight-route-arrow { font-weight: 700; color: #71717a; padding-bottom: 0.85rem; }
+        .flight-date-box {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 1.5px solid #1E60A2; border-radius: 0.6rem;
+            padding: 0.35rem 0.55rem; min-width: 4.2rem; flex-shrink: 0;
+            background: #D5E6F7;
+        }
+        .dark .flight-date-box { background: #D5E6F7; border-color: #1E60A2; }
+        .flight-date-box .booking-date-num { font-size: 1.15rem; color: #1E60A2; }
+        .flight-date-box .booking-date-label { margin-top: 2px; font-size: 0.58rem; color: #1E60A2; }
+        .dark .flight-date-box .booking-date-label { color: #1E60A2; }
+        .flight-card-top {
+            display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;
+        }
+        .flight-card-route {
+            display: flex; align-items: center; justify-content: center; gap: 0.85rem;
+            margin-top: 0.85rem; padding: 0.65rem 0.5rem;
+            background: #fafafa; border-radius: 0.85rem; border: 1px solid #e4e4e7;
+        }
+        .dark .flight-card-route { background: #18181b; border-color: #3f3f46; }
+        .flight-card-times {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        .flight-time-cell {
+            text-align: center; padding: 0.55rem 0.4rem;
+            border-radius: 0.75rem; background: #fafafa; border: 1px solid #e4e4e7;
+        }
+        .dark .flight-time-cell { background: #18181b; border-color: #3f3f46; }
+        .flight-time-cell-dep {
+            background: #F8D4D4;
+            border-color: #E3A0A0;
+        }
+        .dark .flight-time-cell-dep {
+            background: #5A1C1C;
+            border-color: #9E0000;
+        }
+        .booking-dt-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        .booking-dt-cell {
+            text-align: center; padding: 0.5rem 0.35rem;
+            border-radius: 0.75rem; border: 1.5px solid;
+        }
+        .booking-dt-cell-date {
+            background: transparent; border-color: #920000;
+        }
+        .booking-dt-cell-time {
+            background: #D6E8EE; border-color: #1A5F7A;
+        }
+        .dark .booking-dt-cell-date { background: transparent; border-color: #920000; }
+        .dark .booking-dt-cell-time { background: #12333d; }
+        .booking-dt-cell .booking-date-num,
+        .booking-dt-cell .booking-time-num { font-size: 1.35rem; }
+        .booking-dt-cell .booking-date-label,
+        .booking-dt-cell .booking-time-label { margin-top: 3px; }
+        .flight-time-cell .dep-time, .flight-time-cell .arr-time {
+            display: block; font-size: 1.35rem;
+        }
+        .flight-time-label-sm {
+            display: block; font-size: 0.65rem; font-weight: 700;
+            letter-spacing: 0.03em; margin-bottom: 0.2rem; color: #71717a;
+        }
+        .flight-time-cell-dep .flight-time-label-sm { color: #9E0000; }
+        .flight-card-meta {
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 0.5rem; margin-top: 0.65rem; flex-wrap: wrap;
+        }
+        .flight-route-arrow { padding-bottom: 0.85rem; }
+        @media (min-width: 640px) {
+            .flight-card-times { grid-template-columns: 1fr 1fr; max-width: 22rem; margin-left: auto; margin-right: 0; }
+            .flight-card-route { justify-content: flex-start; }
+        }
+
+        .flight-iata-dest { color: #E97132 !important; }
+        .flight-city-dest { color: #E97132 !important; }
+        .meal-lunch {
+            background: #DAE9F8;
+            color: #1E60A2;
+        }
+        .ig-mini {
+            display: inline-flex; align-items: center; gap: 2px;
+            color: #1E60A2; text-decoration: none; vertical-align: middle;
+        }
+        .ig-mini svg { width: 13px; height: 13px; display: block; }
+        .ig-mini .ig-arr { font-size: 0.7rem; font-weight: 800; line-height: 1; }
+                .tabelog-score {
+            display: inline-flex; align-items: center; justify-content: center;
+            min-width: 2.6rem; font-size: 1.05rem; font-weight: 800; color: #fff;
+            background: #F14A00; border-radius: 0.5rem; padding: 0.18rem 0.45rem;
+            line-height: 1.2; text-decoration: none;
+            font-family: 'Daytona','Oswald',sans-serif;
+        }
+        .tabelog-score:hover { filter: brightness(1.08); }
+                .wx-tokyo-stamp {
+            position: absolute;
+            right: 0.7rem;
+            bottom: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #C49A7A;
+            letter-spacing: 0.1em;
+            line-height: 1;
+            font-family: 'Daytona','Oswald','Arial Narrow',sans-serif;
+            font-style: normal;
+            pointer-events: none;
+        }
+        .wx-card-tokyo { padding-bottom: 1.55rem !important; }
+        .day-sub-nav { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.25rem; }
+        .sub-tab-btn {
+            font-size:0.8rem; font-weight:700; letter-spacing:0.02em;
+            padding:0.35rem 0.75rem; border-radius:999px;
+            border:1.5px solid #d4d4d8; color:#71717a; background:transparent;
+        }
+        .sub-tab-btn.on {
+            border-color:#8B2E1F; color:#8B2E1F; background:#F8EBE6;
+        }
+        .dark .sub-tab-btn { border-color:#3f3f46; color:#a1a1aa; }
+        .dark .sub-tab-btn.on { border-color:#E8B4A8; color:#E8B4A8; background:rgba(139,46,31,.25); }
+.city-stamp {
+            position: absolute; right: 1.05rem; bottom: 0.65rem;
+            font-size: 1.55rem; font-weight: 700; color: #C49A7A;
+            letter-spacing: 0.14em; line-height: 1; pointer-events: none;
+            font-family: 'Daytona','Oswald','Arial Narrow',sans-serif;
+            font-style: normal;
+        }
+        .badge-booked {
+            display: inline-block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em;
+            color: #047857; background: #ecfdf5; border: 1px solid #6ee7b7;
+            padding: 0.2rem 0.5rem; border-radius: 0.4rem;
+        }
+        
+        .opt-dest-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+            line-height: 1.375;
+            margin: 0;
+        }
+        .badge-optional {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #71717a;
+            background: transparent;
+            border: 1.5px solid #ffffff;
+            box-shadow: inset 0 0 0 1px #d4d4d8;
+            padding: 0.12rem 0.45rem;
+            border-radius: 0.25rem;
+            line-height: 1.2;
+            flex-shrink: 0;
+            align-self: center;
+        }
+        .dark .badge-optional { color: #e4e4e7; border-color: #ffffff; box-shadow: none; }
+        .drive-today-box {
+            border: 1.5px solid #1E60A2;
+            background: #D5E6F7;
+            color: #1E60A2;
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 0.02em;
+            padding: 0.35rem 0.6rem;
+            border-radius: 0.5rem;
+            white-space: nowrap;
+            line-height: 1.2;
+            align-self: flex-start;
+        }
+        .dark .drive-today-box {
+            background: rgba(30,96,162,0.18);
+            border-color: #7EB3E0;
+            color: #93C5FD;
+        }
+        .card-optional {
+            border-style: dashed !important;
+            border-width: 1.5px !important;
+            border-color: #BE5014 !important;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-optional > * { position: relative; z-index: 1; }
+        .route-optional {
+            border-style: dashed !important;
+            border-width: 1.5px !important;
+            border-color: #BE5014 !important;
+        }
+        .card-book, .route-book {
+            border-color: #FF0000 !important;
+        }
+        .card-book::after {
+            color: #FF0000;
+            background: linear-gradient(to left, #FF0000 18%, rgba(255,0,0,0) 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .dark .card-optional,
+        .dark .route-optional {
+            border-color: #E07A3D !important;
+        }
+                .card-optional::after {
+            content: "?";
+            position: absolute;
+            right: -0.15rem;
+            top: 50%;
+            transform: translateY(-52%);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 7.2rem;
+            font-weight: 700;
+            line-height: 0.8;
+            color: #BE5014;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.38;
+            background: linear-gradient(to left, #BE5014 18%, rgba(190,80,20,0) 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.06em;
+        }
+        .dark .card-optional::after {
+            color: #BE5014;
+            opacity: 0.34;
+            background: linear-gradient(to left, #BE5014 18%, rgba(190,80,20,0) 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [id^="content-d"] .box-resto {
+            position: relative;
+            overflow: hidden;
+        }
+        [id^="content-d"] .box-resto > * { position: relative; z-index: 1; }
+        [id^="content-d"] .box-resto::after {
+            content: "🍴";
+            position: absolute;
+            right: 0.15rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 5.6rem;
+            line-height: 0.8;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.38;
+            background: linear-gradient(to left, #BE5014 18%, rgba(190,80,20,0) 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #BE5014;
+        }
+        .dark [id^="content-d"] .box-resto::after {
+            opacity: 0.34;
+            background: linear-gradient(to left, #BE5014 18%, rgba(190,80,20,0) 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .box-hotel {
+            position: relative;
+            overflow: hidden;
+        }
+        .box-hotel > * { position: relative; z-index: 1; }
+        .box-hotel::after {
+            content: "♨";
+            position: absolute;
+            right: 0.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: "Hiragino Mincho ProN", "Yu Mincho", Georgia, serif;
+            font-size: 6.2rem;
+            font-weight: 700;
+            line-height: 0.75;
+            pointer-events: none;
+            z-index: 0;
+            color: #BE5014;
+            opacity: 0.28;
+            -webkit-mask-image: linear-gradient(to left, #000 22%, transparent 92%);
+            mask-image: linear-gradient(to left, #000 22%, transparent 92%);
+        }
+        .dark .box-hotel::after { opacity: 0.32; }
+
+        .box-car { position: relative; overflow: hidden; }
+        .box-car > * { position: relative; z-index: 1; }
+        .box-car::after {
+            content: "🚗";
+            position: absolute;
+            right: 0.15rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 5.6rem;
+            line-height: 0.8;
+            pointer-events: none;
+            z-index: 0;
+            color: #BE5014;
+            opacity: 0.28;
+            -webkit-mask-image: linear-gradient(to left, #000 22%, transparent 92%);
+            mask-image: linear-gradient(to left, #000 22%, transparent 92%);
+        }
+        .dark .box-car::after { opacity: 0.32; }
+        .car-pickup-box, .car-dt-pickup {
+            border-color: #3C7D22 !important;
+            background: transparent !important;
+        }
+        .car-pickup-box .booking-date-num,
+        .car-dt-pickup .booking-date-num,
+        .car-dt-pickup .booking-time-num { color: #3C7D22 !important; }
+        .car-pickup-box .booking-date-label,
+        .car-dt-pickup .booking-date-label,
+        .car-dt-pickup .booking-time-label { color: #3C7D22 !important; }
+        .car-dt-return {
+            background: transparent !important;
+            border-color: #920000 !important;
+        }
+        .car-dt-return .booking-time-num,
+        .car-dt-return .booking-date-num { color: #920000 !important; }
+        .nissan-logo { height: 28px; width: auto; display: block; }
+
+        .box-hotel.box-book-tokyo::after {
+            content: "🏨";
+            font-family: "Apple Color Emoji","Segoe UI Emoji",sans-serif;
+            font-size: 5.2rem;
+            font-weight: 400;
+        }
+
+
+
+
+        .badge-unbooked {
+            display: inline-block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em;
+            color: #991b1b; background: #fef2f2; border: 1px solid #fca5a5;
+            padding: 0.2rem 0.5rem; border-radius: 0.4rem;
+        }
+        .tokyo-fade-link {
+            font-family: Rockwell, "Rockwell Extra Bold", "Rockwell Nova", Georgia, serif;
+            font-weight: 700;
+            font-size: 1.22rem;
+            letter-spacing: 0.16em;
+            line-height: 1;
+            text-decoration: none;
+            color: #C49A7A;
+            border: none;
+            padding: 0.2rem 0.15rem 0.2rem 0.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.28rem;
+            flex-shrink: 0;
+            background: transparent;
+            position: relative;
+        }
+        .tokyo-fade-link .tokyo-mark {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .tokyo-fade-link .tokyo-tower {
+            height: 1.85rem;
+            width: 1.85rem;
+            object-fit: cover;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: block;
+        }
+        .tokyo-fade-link .tokyo-word {
+            position: relative;
+        }
+        .tokyo-fade-link .tokyo-arr {
+            font-family: Arial, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0;
+            line-height: 1;
+            opacity: 0.9;
+            margin-left: 0.05rem;
+            position: relative;
+            z-index: 1;
+        }
+        .site-title {
+            font-family: 'Oswald', 'Daytona', sans-serif;
+            font-weight: 700;
+            font-size: 1.28rem;
+            letter-spacing: 0.06em;
+            line-height: 1.05;
+            color: #8B2E1F;
+            text-transform: uppercase;
+        }
+        .dark .site-title { color: #E8B4A8; }
+        .dark .tokyo-fade-link { color: #D4B49A; border-color: #D4B49A; }
+        .tokyo-fade-link:hover { background: rgba(196,154,122,0.12); }
+        .badge-michelin {
+            display: inline-block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em;
+            color: #78350f; background: linear-gradient(90deg,#fde68a,#fbbf24);
+            border: 1px solid #d97706; padding: 0.2rem 0.5rem; border-radius: 0.4rem;
+        }
+        .box-sight { border-color: #9F4411 !important; }
+        .box-resto { border-color: #D4A373 !important; }
+        .box-hotel, .box-sight, .box-resto { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+        .box-hotel:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(166,201,236,.45); }
+        .box-sight:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(159,68,17,.28); }
+        .box-resto:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(212,163,115,.35); }
+        .box-book-tokyo { border-width: 3px !important; border-color: #C49A7A !important; }
+        .box-book-tokyo:hover { border-color: #C49A7A !important; box-shadow: 0 10px 28px rgba(196,154,122,.28); }
+                .box-book-hokkaido { border-width: 3px !important; border-color: #8B2E1F !important; }
+        .box-book-hokkaido:hover { border-color: #8B2E1F !important; box-shadow: 0 10px 28px rgba(139,46,31,.28); }
+.box-book-other { border-width: 3px !important; border-color: #E97132 !important; }
+        .box-book-other:hover { border-color: #E97132 !important; box-shadow: 0 10px 28px rgba(233,113,50,.25); }
+        .box-book-moliere { border-width: 3px !important; border-color: #CC9900 !important; }
+        .box-book-moliere:hover { border-color: #CC9900 !important; box-shadow: 0 10px 28px rgba(204,153,0,.35); }
+        .airline-logo { height: 28px; width: auto; object-fit: contain; flex-shrink: 0; }
+        .airline-logo-airdo { height: 40px; width: auto; object-fit: contain; flex-shrink: 0; }
+        .dep-time { color: #9E0000; font-weight: 800; font-size: 1.5rem; font-family: 'Daytona','Oswald',sans-serif; line-height: 1.1; }
+        .arr-time { color: #111; font-weight: 600; font-size: 0.85rem; }
+        .dark .arr-time { color: #e4e4e7; }
+        .term-label { color: #4C216D; font-weight: 800; font-size: 1.05rem; }
+        .flight-arrow { color: #FF2121; font-size: 1rem; line-height: 1; }
+        .flight-date { font-size: 0.8rem; font-weight: 600; color: #71717A; letter-spacing: 0.02em; }
+        .jma-warn-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            font-weight: 800; font-size: 0.9rem; color: #C00000 !important;
+            background: #FEE2E2; border: 2px solid #C00000; border-radius: 0.7rem;
+            padding: 0.45rem 0.85rem; letter-spacing: 0.02em; line-height: 1.1;
+            box-shadow: 0 2px 0 #C00000;
+        }
+        .jma-warn-btn:hover { background: #fecaca; }
+        .wx-refresh-btn {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            font-weight: 800; font-size: 0.9rem; color: #9A3412;
+            background: #FFEDD5; border: 2px solid #EA580C; border-radius: 0.7rem;
+            padding: 0.45rem 0.9rem; letter-spacing: 0.02em;
+            box-shadow: 0 2px 0 #EA580C; cursor: pointer;
+        }
+        .wx-refresh-btn:hover { background: #fed7aa; }
+        .wx-refresh-btn.spinning { opacity: 0.7; pointer-events: none; }
+        .wx-refresh-btn.spinning { animation: wxpulse 0.9s ease-in-out infinite; }
+        @keyframes wxpulse { 50% { transform: scale(0.97); filter: brightness(1.08); } }
+        .wx-tmax { color: #DC2626; font-weight: 800; font-size: 1.35rem; font-family: 'Daytona','Oswald',sans-serif; line-height: 1; }
+        .wx-tmin { color: #2563EB; font-weight: 800; font-size: 1.35rem; font-family: 'Daytona','Oswald',sans-serif; line-height: 1; }
+        .wx-feels { color: #111; font-weight: 700; font-size: 0.95rem; }
+        .dark .wx-feels { color: #e4e4e7; }
+        .wx-rain-low { color: #111; }
+        .dark .wx-rain-low { color: #e4e4e7; }
+        .wx-rain-mid { color: #EA580C; }
+        .wx-rain-high { color: #DC2626; }
+        .wx-icon { width: 52px; height: 52px; flex-shrink: 0; }
+        .wx-source { font-size: 0.7rem; color: #a1a1aa; }
+    
+        .booking-day-pair {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            .booking-day-pair { grid-template-columns: 1fr 1fr; }
+            .booking-day-pair > .card-item { min-width: 0; }
+        }
+
+    
+        .booking-day-label {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #920000;
+            margin: 0.6rem 0 0.2rem;
+            font-family: 'Daytona','Oswald','Arial Narrow',sans-serif;
+        }
+        .city-stamp-hokkaido { color: #8B2E1F !important; }
+
+    </style>
+</head>
+<body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 min-h-screen flex flex-col">
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-zinc-950/90 backdrop-blur border-b border-zinc-200 dark:border-zinc-800">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
+            <div class="min-w-0 flex-1">
+                <h1 class="site-title truncate">Nikko Autumn</h1>
+                <p class="text-[11px] text-zinc-400">Nov 06 – Nov 10 · Nikko</p>
+            </div>
+            <div class="hidden sm:flex items-center gap-2 text-xs text-zinc-500">
+                <div class="w-24 h-1.5 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                    <div id="progressFill" class="h-full bg-[#B33D18]" style="width:0%"></div>
+                </div>
+                <span id="progressText">0%</span>
+            </div>
+            <input id="searchInput" oninput="handleSearch()" placeholder="搜尋…" class="w-28 sm:w-40 text-sm px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-transparent hidden sm:block">
+            <a href="https://kaworu327.github.io/Tokyo-Autumn-2026/" target="_blank" rel="noopener" class="tokyo-fade-link" title="Tokyo Autumn 2026"><span class="tokyo-mark"><img class="tokyo-tower" src="data:image/png;base64,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" alt="" width="28" height="28"><span class="tokyo-word">TOKYO</span></span><span class="tokyo-arr">→</span></a>
+            <button id="themeToggle" class="p-2 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleTheme()">◐</button>
+        </div>
+        <div class="tab-scroll-wrap">
+            <button type="button" class="tab-scroll-btn" id="tabScrollLeft" aria-label="向左捲動分頁" onclick="scrollTabBar(-1)">‹</button>
+            <div id="tabScroll" class="flex-1 min-w-0 px-0 overflow-x-auto no-scrollbar">
+            <nav class="flex gap-1 min-w-max">
+                <button onclick="switchTab('hotels')" id="tab-hotels" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-brand-accent text-zinc-900 dark:text-white whitespace-nowrap">Hotels</button>
+                <button onclick="switchTab('bookings')" id="tab-bookings" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-transparent text-zinc-400 hover:text-zinc-600 whitespace-nowrap">Bookings</button>
+                <button onclick="switchTab('transport')" id="tab-transport" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-transparent text-zinc-400 hover:text-zinc-600 whitespace-nowrap">Transport</button>
+                <button onclick="switchTab('weather')" id="tab-weather" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-transparent text-zinc-400 hover:text-zinc-600 whitespace-nowrap">Weather</button>
+                <button onclick="switchTab('d1')" id="tab-d1" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-transparent text-zinc-400 whitespace-nowrap">D1</button>
+                <button onclick="switchTab('d2')" id="tab-d2" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-transparent text-zinc-400 whitespace-nowrap">D2</button>
+                <button onclick="switchTab('d3')" id="tab-d3" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-transparent text-zinc-400 whitespace-nowrap">D3</button>
+                <button onclick="switchTab('d4')" id="tab-d4" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-transparent text-zinc-400 whitespace-nowrap">D4</button>
+                <button onclick="switchTab('d5')" id="tab-d5" class="tab-btn px-4 py-2.5 text-sm font-semibold tracking-wide border-b-2 border-transparent text-zinc-400 whitespace-nowrap">D5</button>
+            </nav>
+            </div>
+            <button type="button" class="tab-scroll-btn" id="tabScrollRight" aria-label="向右捲動分頁" onclick="scrollTabBar(1)">›</button>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-6 py-8 space-y-8">
+
+        <div id="content-hotels" class="tab-content space-y-6 animate-fadeIn">
+            <div>
+                <h2 class="text-xl font-semibold tracking-tight">Hotels 住宿預算總覽</h2>
+                <p class="text-sm text-zinc-500 mt-1">旅宿 · 規格清單（其他酒店稍後補上）</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
+                    <p class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">Total Cost</p>
+                    <p id="hotelTotalDisplay" class="text-xl font-bold mt-1 tabular-nums">¥0</p>
+                </div>
+                <div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
+                    <p class="text-[11px] font-semibold uppercase tracking-wider text-amber-600/80">Unpaid Sum</p>
+                    <p id="hotelUnpaidDisplay" class="text-xl font-bold mt-1 tabular-nums text-amber-700">¥0</p>
+                </div>
+            </div>
+            <div class="space-y-4" id="hotelsList">
+                <div class="card-item box-hotel bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl shadow-sm" data-id="hotel-remm" data-search="日比谷雷姆飯店">
+                    <div class="flex justify-between items-start gap-3 mb-3">
+                        <div class="min-w-0">
+                            <span class="hotel-date-badge">Nov 6 – Nov 8</span>
+                            <h3 class="text-base font-bold mt-2">日比谷雷姆飯店</h3>
+                        </div>
+                        <div class="flex flex-col items-center shrink-0 pl-2">
+                            <span class="hotel-nights-num">2</span>
+                            <span class="hotel-nights-label">nights</span>
+                        </div>
+                    </div>
+                    <div class="text-sm text-zinc-600 dark:text-zinc-300 space-y-1 mb-4">
+                        <p>• 有樂町 · 東宝シアタークリエビル 2F</p>
+                        <p>• D1–D2 住宿</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E6%97%A5%E6%AF%94%E8%B0%B7%E9%9B%B7%E5%A7%86%E9%A3%AF%E5%BA%97+%E6%9D%B1%E5%AE%9D%E3%82%B7%E3%82%A2%E3%82%BF%E3%83%BC%E3%82%AF%E3%83%AA%E3%82%A8" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1.5 rounded-lg">Map ↗</a>
+                        <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'hotel-remm')">⬜ 完成</button>
+                    </div>
+                </div>
+                <div class="card-item box-hotel bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl shadow-sm" data-id="hotel-ami" data-search="Gasthof Ami">
+                    <div class="flex justify-between items-start gap-3 mb-3">
+                        <div class="min-w-0">
+                            <span class="hotel-date-badge">Nov 8 – Nov 9</span>
+                            <h3 class="text-base font-bold mt-2">Gasthof Ami</h3>
+                        </div>
+                        <div class="flex flex-col items-center shrink-0 pl-2">
+                            <span class="hotel-nights-num">1</span>
+                            <span class="hotel-nights-label">night</span>
+                        </div>
+                    </div>
+                    <div class="text-sm text-zinc-600 dark:text-zinc-300 space-y-1 mb-4">
+                        <p>• 日光 · D3 Check-in</p>
+                        <p>• 費用：待補</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                        <a href="https://www.google.com/maps/search/?api=1&query=Gasthof+Ami+日光" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1.5 rounded-lg">Map ↗</a>
+                        <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'hotel-ami')">⬜ 完成</button>
+                    </div>
+                </div>
+                <div class="card-item box-hotel bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl shadow-sm" data-id="hotel-villa" data-search="樂天住宿 VILLA 鬼怒川河畔">
+                    <div class="flex justify-between items-start gap-3 mb-3">
+                        <div class="min-w-0">
+                            <span class="hotel-date-badge">Nov 9 – Nov 10</span>
+                            <h3 class="text-base font-bold mt-2">樂天住宿 VILLA 鬼怒川河畔</h3>
+                        </div>
+                        <div class="flex flex-col items-center shrink-0 pl-2">
+                            <span class="hotel-nights-num">1</span>
+                            <span class="hotel-nights-label">night</span>
+                        </div>
+                    </div>
+                    <div class="text-sm text-zinc-600 dark:text-zinc-300 space-y-1 mb-4">
+                        <p>• 鬼怒川 · D4 Check-in</p>
+                        <p>• 費用：待補</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                        <a href="https://www.google.com/maps/search/?api=1&query=楽天+STAY+VILLA+鬼怒川" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1.5 rounded-lg">Map ↗</a>
+                        <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'hotel-villa')">⬜ 完成</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-bookings" class="tab-content hidden space-y-6 animate-fadeIn">
+            <div>
+                <h2 class="text-xl font-semibold tracking-tight">Bookings 預約</h2>
+                <p class="text-sm text-zinc-500 mt-1">餐廳／髮型預約</p>
+            </div>
+
+            <p class="booking-day-label">Nov 06</p>
+            <div class="booking-day-pair">
+                <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl relative" data-id="book-iori" data-search="炭火割烹 庵">
+                    <div class="booking-dt-grid"><div class="booking-dt-cell booking-dt-cell-date"><span class="booking-date-num">Nov 06</span><span class="booking-date-label">Booking Date</span></div><div class="booking-dt-cell booking-dt-cell-time"><span class="booking-time-num">13:00</span><span class="booking-time-label">Booking Time</span></div></div>
+                    <h3 class="font-bold text-base mt-3">炭火割烹 庵</h3>
+                    <p class="text-sm text-zinc-500 mt-1">馬車道 · 日本料理</p>
+                    <span class="inline-block mt-2 text-xs font-bold px-2 py-0.5 rounded" style="background:#DAE9F8;color:#1E60A2;">LUNCH</span>
+                    <div class="flex flex-wrap gap-1.5 mt-3">
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E7%82%AD%E7%81%AB%E5%89%B2%E7%83%B9+%E5%BA%B5+%E9%A6%AC%E8%BB%8A%E9%81%93" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://tabelog.com/tw/kanagawa/A1401/A140104/14079044/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Tabelog ↗</a>
+                    </div>
+                    <span class="city-stamp">TOKYO</span>
+                </div>
+                <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="book-hair" data-search="Maison de Noche haircut">
+                    <div class="booking-dt-grid"><div class="booking-dt-cell booking-dt-cell-date"><span class="booking-date-num">Nov 06</span><span class="booking-date-label">Booking Date</span></div><div class="booking-dt-cell booking-dt-cell-time"><span class="booking-time-num">15:30</span><span class="booking-time-label">Booking Time</span></div></div>
+                    <h3 class="font-bold text-base mt-3">Haircut · Maison de Noche</h3>
+                    <p class="text-sm text-zinc-500 mt-1">中目黑 · MINAMI</p>
+                    <div class="flex flex-wrap gap-1.5 mt-3">
+                        <a href="https://www.google.com/maps/search/?api=1&query=Maison+de+Noche+Nakameguro" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://www.instagram.com/u__pth8/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">IG ↗</a>
+                    </div>
+                    <span class="city-stamp">TOKYO</span>
+                </div>
+            </div>
+            <div class="booking-day-pair">
+                <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl relative" data-id="book-seirin" data-search="聖林館">
+                    <div class="booking-dt-grid"><div class="booking-dt-cell booking-dt-cell-date"><span class="booking-date-num">Nov 06</span><span class="booking-date-label">Booking Date</span></div><div class="booking-dt-cell booking-dt-cell-time"><span class="booking-time-num">18:00</span><span class="booking-time-label">Booking Time</span></div></div>
+                    <h3 class="font-bold text-base mt-3">聖林館</h3>
+                    <p class="text-sm text-zinc-500 mt-1">中目黑 · 披薩</p>
+                    <span class="inline-block mt-2 text-xs font-bold px-2 py-0.5 rounded" style="background:#FFE8D6;color:#9A3412;">DINNER</span>
+                    <div class="flex flex-wrap gap-1.5 mt-3">
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E8%81%96%E6%9E%97%E9%A4%A8+%E4%B8%AD%E7%9B%AE%E9%BB%91" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://tabelog.com/tw/tokyo/A1317/A131701/13003188/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Tabelog ↗</a>
+                    </div>
+                    <span class="city-stamp">TOKYO</span>
+                </div>
+            </div>
+
+            <p class="booking-day-label">Nov 07</p>
+            <div class="booking-day-pair">
+                <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl relative" data-id="book-tonkatsu" data-search="とんかつ ここまでやるか。">
+                    <div class="booking-dt-grid"><div class="booking-dt-cell booking-dt-cell-date"><span class="booking-date-num">Nov 07</span><span class="booking-date-label">Booking Date</span></div><div class="booking-dt-cell booking-dt-cell-time"><span class="booking-time-num">13:00</span><span class="booking-time-label">Booking Time</span></div></div>
+                    <h3 class="font-bold text-base mt-3">とんかつ ここまでやるか。</h3>
+                    <p class="text-sm text-zinc-500 mt-1">南青山 · 外苑前 · とんかつ</p>
+                    <span class="inline-block mt-2 text-xs font-bold px-2 py-0.5 rounded" style="background:#DAE9F8;color:#1E60A2;">LUNCH</span>
+                    <div class="flex flex-wrap gap-1.5 mt-3">
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E3%81%A8%E3%82%93%E3%81%8B%E3%81%A4+%E3%81%93%E3%81%93%E3%81%BE%E3%81%A7%E3%82%84%E3%82%8B%E3%81%8B%E3%80%82+%E5%8D%97%E9%9D%92%E5%B1%B1" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://tabelog.com/tokyo/A1306/A130603/13294363/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Tabelog ↗</a>
+                    </div>
+                    <span class="city-stamp">TOKYO</span>
+                </div>
+                <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl relative" data-id="book-sato" data-search="SATO Brian">
+                    <div class="booking-dt-grid"><div class="booking-dt-cell booking-dt-cell-date"><span class="booking-date-num">Nov 07</span><span class="booking-date-label">Booking Date</span></div><div class="booking-dt-cell booking-dt-cell-time"><span class="booking-time-num">19:15</span><span class="booking-time-label">Booking Time</span></div></div>
+                    <h3 class="font-bold text-base mt-3">SATO Brian 本店</h3>
+                    <p class="text-sm text-zinc-500 mt-1">阿佐谷 · 燒肉</p>
+                    <span class="inline-block mt-2 text-xs font-bold px-2 py-0.5 rounded" style="background:#FFE8D6;color:#9A3412;">DINNER</span>
+                    <div class="flex flex-wrap gap-1.5 mt-3">
+                        <a href="https://www.google.com/maps/search/?api=1&query=SATO%E3%83%96%E3%83%AA%E3%82%A2%E3%83%B3+%E6%9C%AC%E5%BA%97+%E9%98%BF%E4%BD%90%E3%83%B6%E8%B0%B7" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://tabelog.com/tw/tokyo/A1319/A131905/13127046/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Tabelog ↗</a>
+                    </div>
+                    <span class="city-stamp">TOKYO</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-transport" class="tab-content hidden space-y-6 animate-fadeIn">
+            <div>
+                <h2 class="text-xl font-semibold tracking-tight">Transport 交通</h2>
+                <p class="text-sm text-zinc-500 mt-1">航班／租車</p>
+            </div>
+
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="flt-nh814" data-search="NH814">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base">NH814 · ANA</h3>
+                    <span class="time-daytona tabular-nums shrink-0">00:15 → 05:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-1">Nov 06 · Going</p>
+                <p class="text-sm mb-1"><strong>HKG</strong> 香港國際機場 T1 → <strong style="color:#E97132">HND</strong> 東京羽田 T2</p>
+                <p class="text-xs text-zinc-400">約 3 小時 45 分 · Boeing 787-8</p>
+            </div>
+
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="flt-nh811" data-search="NH811">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base">NH811 · ANA</h3>
+                    <span class="time-daytona tabular-nums shrink-0">18:25 → 22:50</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-1">Nov 10 · Return</p>
+                <p class="text-sm mb-1"><strong>NRT</strong> 成田機場 T1 → <strong style="color:#E97132">HKG</strong> 香港國際機場 T1</p>
+                <p class="text-xs text-zinc-400">約 5 小時 25 分 · Boeing 787-8</p>
+            </div>
+
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="car-nippon" data-search="Nippon-rent-a-car R0NVZ0FM">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base">Nippon-rent-a-car</h3>
+                    <span class="time-daytona tabular-nums shrink-0 text-sm">Nov 8 09:00 → Nov 10 16:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-1">東京駅八重洲南口 · 予約番号：<strong>R0NVZ0FM</strong></p>
+                <p class="text-xs text-zinc-400 mb-2">東京都中央区八重洲２―１ 八重洲西駐車場内</p>
+                <p class="text-sm mb-1">還車：千葉県成田市取香４９５－２（NRT）</p>
+                <div class="flex flex-wrap gap-1.5 mt-3">
+                    <a href="https://www.google.com/maps/place/Nippon+Rent-a-car+Tokyo-station-Yaesu-branch/@35.6790893,139.7680514,17z/data=!3m1!4b1!4m6!3m5!1s0x60188bfc7d8cfedf:0xc251520d9a16f39a!8m2!3d35.6790893!4d139.7680514!16s%2Fg%2F1tgw9x79" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">取車 Map ↗</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%83%E8%91%89%E7%9C%8C%E6%88%90%E7%94%B0%E5%B8%82%E5%8F%96%E9%A6%99%EF%BC%94%EF%BC%99%EF%BC%95%EF%BC%8D%EF%BC%92" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">還車 Map ↗</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-weather" class="tab-content hidden space-y-5 animate-fadeIn">
+            <div class="flex items-start justify-between gap-3">
+                <a class="jma-warn-btn" href="https://www.jma.go.jp/bosai/map.html#5/34.5/137/&elem=all&contents=warning&lang=en" target="_blank" rel="noopener">JMA warning</a>
+                <button type="button" id="wxRefreshBtn" class="wx-refresh-btn" onclick="loadWeather(true)">↻ Refresh</button>
+            </div>
+            <div>
+                <h2 class="text-xl font-semibold tracking-tight">Weather 天氣預報</h2>
+                <p class="text-sm text-zinc-500 mt-0.5">Nov 06 – Nov 10 · 以當日主要停留地</p>
+            </div>
+            <div id="wxNearBox" class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4">
+                <div class="flex items-start justify-between gap-2">
+                    <div>
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">Next 24h · GPS</p>
+                        <p id="wxNearTitle" class="font-bold mt-0.5">正在偵測位置…</p>
+                        <p id="wxNearMeta" class="text-xs text-zinc-400">Open-Meteo · 每 3 小時</p>
+                    </div>
+                    <button type="button" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md" onclick="loadNearWeather(true)">定位</button>
+                </div>
+                <div id="wxNearList" class="mt-3 flex gap-2 overflow-x-auto no-scrollbar"></div>
+            </div>
+            <p id="wxMeta" class="text-xs text-zinc-400">載入中…</p>
+            <div id="wxList" class="space-y-3"></div>
+            <p class="wx-source">Live forecast via Open-Meteo。tenki.jp 無公開 API，每日本地詳細請開 tenki.jp。</p>
+        </div>
+
+        <div id="content-d1" class="tab-content hidden space-y-5 animate-fadeIn">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-semibold tracking-tight">Day 1 · Nov 06 (Fri)</h2>
+                    <p class="text-sm text-zinc-500 mt-0.5">落地羽田 → Glitch Coffee → 伊勢丹 → 中目黑 → 聖林館</p>
+                </div>
+            </div>
+            <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200/60 rounded-xl p-4 text-sm">📌 <strong>已預約：</strong>15:30 Haircut · 18:00 聖林館。13:00 炭火割烹 庵（橫濱）與此行程衝突，未放入本日流程。</div>
+
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d1-arr" data-search="NH814 抵達">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">NH814 抵達羽田 T2</h3>
+                    <span class="time-daytona tabular-nums shrink-0">05:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">入境 + 海關 + 取行李：45–60 分鐘</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF+%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-arr')">⬜ 完成</button>
+                </div>
+            </div>
+            <div class="card-item card-optional bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d1-spot" data-search="T2 plane spotting">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">T2 睇飛機 <span class="opt-tag">Optional</span></h3>
+                    <span class="time-daytona tabular-nums shrink-0">約 06:00–06:20</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">Plane spotting · 約 20 分鐘 · 可跳過</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-spot')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF+%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB&destination=%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF+%E7%AC%AC3%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB&travelmode=transit" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">羽田 T2</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">免費接駁約 10–15 分 · T2 1F 到達大堂 9 號乘車處</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">羽田 T3</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d1-festa" data-search="ANA FESTA">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">ANA FESTA 羽田第3ターミナルロビーギフト店</h3>
+                    <span class="time-daytona tabular-nums shrink-0">約 06:40–07:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">T3 3F 出發大堂（安檢前）· 06:00 開 · 快速購物</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=ANA+FESTA+%E7%BE%BD%E7%94%B0%E7%AC%AC3%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB%E3%83%AD%E3%83%93%E3%83%BC" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-festa')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF+%E7%AC%AC3%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB&destination=%E6%97%A5%E6%AF%94%E8%B0%B7%E9%9B%B7%E5%A7%86%E9%A3%AF%E5%BA%97&travelmode=transit" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">羽田 T3</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">約 45–50 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">日比谷雷姆</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item box-hotel bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d1-h" data-search="日比谷雷姆飯店">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">日比谷雷姆飯店</h3>
+                    <span class="time-daytona tabular-nums shrink-0">約 07:30–08:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">有樂町 · 放行李／稍作休息</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=%E6%97%A5%E6%AF%94%E8%B0%B7%E9%9B%B7%E5%A7%86%E9%A3%AF%E5%BA%97+%E6%9D%B1%E5%AE%9D%E3%82%B7%E3%82%A2%E3%82%BF%E3%83%BC%E3%82%AF%E3%83%AA%E3%82%A8" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-h')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=%E6%97%A5%E6%AF%94%E8%B0%B7%E9%9B%B7%E5%A7%86%E9%A3%AF%E5%BA%97&destination=Glitch+Coffee+and+Roasters+GINZA&travelmode=transit" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">日比谷雷姆</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">約 15–20 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">Glitch Coffee</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d1-glitch" data-search="Glitch Coffee">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">Glitch Coffee and Roasters GINZA</h3>
+                    <span class="time-daytona tabular-nums shrink-0">09:00–09:30</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">銀座 · 咖啡</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/place/Glitch+Coffee+and+Roasters+GINZA/@35.6689171,139.7686324,17z/data=!3m1!4b1!4m6!3m5!1s0x60188bfa45634c13:0x6abbdc48213cb890!8m2!3d35.6689171!4d139.7686324!16s%2Fg%2F11kbh8m4c2" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-glitch')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=Glitch+Coffee+and+Roasters+GINZA&destination=%E4%BC%8A%E5%8B%A2%E4%B8%B9+%E6%96%B0%E5%AE%BF%E5%BA%97&travelmode=transit" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">Glitch Coffee</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">約 20–25 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">新宿伊勢丹</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d1-0" data-search="新宿伊勢丹">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">新宿伊勢丹</h3>
+                    <span class="time-daytona tabular-nums shrink-0">10:00–13:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">購物 · 13:00 出發</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=%E4%BC%8A%E5%8B%A2%E4%B8%B9+%E6%96%B0%E5%AE%BF%E5%BA%97" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-0')">⬜ 完成</button>
+                </div>
+            </div>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d1-lunchopt" data-search="Ramenya Shima saru-suberi">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">午餐二選一</h3>
+                    <span class="time-daytona tabular-nums shrink-0">13:30–14:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-2">Ramenya Shima 或 saru-suberi</p>
+                <div class="flex flex-wrap gap-1.5 mb-3">
+                    <a href="https://www.google.com/maps/place/Ramenya+Shima/@35.6883441,139.6808875,17z/data=!3m1!4b1!4m6!3m5!1s0x6018f3ceeccc3d4d:0xb114d79d470c8ac2!8m2!3d35.6883441!4d139.6808875!16s%2Fg%2F11jn9yn73_" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Ramenya Shima ↗</a>
+                    <a href="https://www.google.com/maps/place/saru-suberi/@35.690966,139.705352,17z/data=!3m1!4b1!4m6!3m5!1s0x60188cdb725de861:0x74cc1c50d4a25c4c!8m2!3d35.690966!4d139.705352!16s%2Fg%2F12hqf900g" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">saru-suberi ↗</a>
+                </div>
+                <div class="flex justify-end"><button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-lunchopt')">⬜ 完成</button></div>
+            </div>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d1-shopnaka" data-search="中目黑購物">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">中目黑購物</h3>
+                    <span class="time-daytona tabular-nums shrink-0">14:30–15:30</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">15:30 前出發去剪髮</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=%E4%B8%AD%E7%9B%AE%E9%BB%91%E9%A7%85" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-shopnaka')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=%E4%B8%AD%E7%9B%AE%E9%BB%91%E9%A7%85&destination=Maison+de+Noche+Nakameguro&travelmode=walking" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">中目黑</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">步行約 5–10 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">Maison de Noche</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d1-2" data-search="Maison de Noche">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">Haircut · Maison de Noche</h3>
+                    <span class="time-daytona tabular-nums shrink-0">15:30–17:30</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">中目黑 · 已預約</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5">
+                        <a href="https://www.google.com/maps/search/?api=1&query=Maison+de+Noche+Nakameguro" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://www.instagram.com/u__pth8/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">IG ↗</a>
+                    </div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-2')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=Maison+de+Noche+Nakameguro&destination=COVERCHORD+Nakameguro&travelmode=walking" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">Maison de Noche</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">步行約 5–10 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">Coverchord</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d1-4" data-search="Coverchord 中目黑">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">Coverchord 中目黑</h3>
+                    <span class="time-daytona tabular-nums shrink-0">17:30–17:50</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">青葉台 · 17:50 前出發去聖林館</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=COVERCHORD+Nakameguro+%E9%9D%92%E8%91%89%E5%8F%B01-23-14" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-4')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=COVERCHORD+Nakameguro&destination=%E8%81%96%E6%9E%97%E9%A4%A8+%E4%B8%AD%E7%9B%AE%E9%BB%91&travelmode=walking" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">Coverchord</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">步行約 10–15 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">聖林館</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d1-3" data-search="聖林館">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">聖林館</h3>
+                    <span class="time-daytona tabular-nums shrink-0">18:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-1">中目黑 · 披薩晚餐 · 已預約</p>
+                <span class="inline-block mb-3 text-xs font-bold px-2 py-0.5 rounded" style="background:#FFE8D6;color:#9A3412;">DINNER</span>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5">
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E8%81%96%E6%9E%97%E9%A4%A8+%E4%B8%AD%E7%9B%AE%E9%BB%91" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://tabelog.com/tw/tokyo/A1317/A131701/13003188/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Tabelog ↗</a>
+                    </div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d1-3')">⬜ 完成</button>
+                </div>
+            </div>
+        </div>
+
+<div id="content-d2" class="tab-content hidden space-y-5 animate-fadeIn">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-semibold tracking-tight">Day 2 · Nov 07 (Sat)</h2>
+                    <p class="text-sm text-zinc-500 mt-0.5">羅浮宮展 → 午餐 → 南青山購物 → SATO Brian</p>
+                </div>
+            </div>
+            <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200/60 rounded-xl p-4 text-sm">📌 <strong>已預約：</strong>19:15 SATO Brian 本店。住宿：日比谷雷姆飯店。</div>
+
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d2-0" data-search="出發 日比谷雷姆">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">日比谷雷姆飯店 出發</h3>
+                    <span class="time-daytona tabular-nums shrink-0">09:30</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">前往國立新美術館</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=%E6%97%A5%E6%AF%94%E8%B0%B7%E9%9B%B7%E5%A7%86%E9%A3%AF%E5%BA%97+%E6%9D%B1%E5%AE%9D%E3%82%B7%E3%82%A2%E3%82%BF%E3%83%BC%E3%82%AF%E3%83%AA%E3%82%A8" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d2-0')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=%E6%97%A5%E6%AF%94%E8%B0%B7%E9%9B%B7%E5%A7%86%E9%A3%AF%E5%BA%97&destination=%E5%9B%BD%E7%AB%8B%E6%96%B0%E7%BE%8E%E8%A1%93%E9%A4%A8&travelmode=transit" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">日比谷雷姆</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">約 20–30 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">國立新美術館</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d2-2" data-search="東京羅浮宮展">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">東京羅浮宮展</h3>
+                    <span class="time-daytona tabular-nums shrink-0">10:00–12:30</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">國立新美術館 · ルーヴル美術館展 ルネサンス · 12:30 準時離開</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=%E5%9B%BD%E7%AB%8B%E6%96%B0%E7%BE%8E%E8%A1%93%E9%A4%A8" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d2-2')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=%E5%9B%BD%E7%AB%8B%E6%96%B0%E7%BE%8E%E8%A1%93%E9%A4%A8&destination=%E3%81%A8%E3%82%93%E3%81%8B%E3%81%A4+%E3%81%93%E3%81%93%E3%81%BE%E3%81%A7%E3%82%84%E3%82%8B%E3%81%8B%E3%80%82+%E5%8D%97%E9%9D%92%E5%B1%B1&travelmode=transit" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">國立新美術館</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">約 15–20 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">ここまでやるか。</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d2-lunch" data-search="とんかつ ここまでやるか。">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">とんかつ ここまでやるか。</h3>
+                    <span class="time-daytona tabular-nums shrink-0">13:00–14:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-1">南青山 · 外苑前 · とんかつ百名店</p>
+                <span class="inline-block mb-3 text-xs font-bold px-2 py-0.5 rounded" style="background:#DAE9F8;color:#1E60A2;">LUNCH</span>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5">
+                        <a href="https://www.google.com/maps/search/?api=1&query=%E3%81%A8%E3%82%93%E3%81%8B%E3%81%A4+%E3%81%93%E3%81%93%E3%81%BE%E3%81%A7%E3%82%84%E3%82%8B%E3%81%8B%E3%80%82+%E5%8D%97%E9%9D%92%E5%B1%B1" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://tabelog.com/tokyo/A1306/A130603/13294363/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Tabelog ↗</a>
+                    </div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d2-lunch')">⬜ 完成</button>
+                </div>
+            </div>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d2-aoyama" data-search="南青山購物">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">南青山購物</h3>
+                    <span class="time-daytona tabular-nums shrink-0">14:15–18:30</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">最終停 Auralee · 18:30 出發去 SATO Brian（預留約 35–40 分鐘車程）</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=%E5%8D%97%E9%9D%92%E5%B1%B1+Auralee" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d2-aoyama')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=%E5%8D%97%E9%9D%92%E5%B1%B1+Auralee&destination=SATO%E3%83%96%E3%83%AA%E3%82%A2%E3%83%B3+%E6%9C%AC%E5%BA%97+%E9%98%BF%E4%BD%90%E3%83%B6%E8%B0%B7&travelmode=transit" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5"><span class="route-dot"></span><span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">南青山</span><div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1"><span class="route-meta">約 35–40 分鐘</span><span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span></div><span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">SATO Brian</span><span class="route-dot"></span></div>
+            </a>
+            <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d2-1" data-search="SATO Brian">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">SATO Brian 本店</h3>
+                    <span class="time-daytona tabular-nums shrink-0">19:15</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-1">阿佐谷 · 燒肉晚餐 · 已預約</p>
+                <span class="inline-block mb-3 text-xs font-bold px-2 py-0.5 rounded" style="background:#FFE8D6;color:#9A3412;">DINNER</span>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5">
+                        <a href="https://www.google.com/maps/search/?api=1&query=SATO%E3%83%96%E3%83%AA%E3%82%A2%E3%83%B3+%E6%9C%AC%E5%BA%97+%E9%98%BF%E4%BD%90%E3%83%B6%E8%B0%B7" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                        <a href="https://tabelog.com/tw/tokyo/A1319/A131905/13127046/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Tabelog ↗</a>
+                    </div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d2-1')">⬜ 完成</button>
+                </div>
+            </div>
+        </div>
+
+<div id="content-d3" class="tab-content hidden space-y-5 animate-fadeIn">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-semibold tracking-tight">Day 3 · Nov 08 (Sun)</h2>
+                    <p class="text-sm text-zinc-500 mt-0.5">松戶拉麵 → 片山酒造 → 神橋 → Gasthof Ami</p>
+                </div>
+                <div class="flex items-start gap-2.5 shrink-0">
+                    <div class="drive-today-box">Today Driving: ~150 km</div>
+                    <div class="text-right text-xs text-zinc-400 shrink-0">日光 🍁<br>—</div>
+                </div>
+            </div>
+            <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200/60 rounded-xl p-4 text-sm">📌 <strong>今日亮點：</strong>松戶富田拉麵午餐，自駕片山酒造參觀試飲，神橋看市街紅葉，17:00 入住 Gasthof Ami。</div>
+
+            <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d3-1" data-search="松戶富田拉麵">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">松戶富田拉麵</h3>
+                    <span class="time-daytona tabular-nums shrink-0">中午</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">午餐</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=松戸富田製麺" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d3-1')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=松戸富田製麺&destination=片山酒造&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">松戶富田拉麵</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 2–2.5 小時</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">片山酒造</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d3-2" data-search="片山酒造">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">片山酒造</h3>
+                    <span class="time-daytona tabular-nums shrink-0">15:00–16:15</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-1">約 14:50 抵達 · 參觀 + 試飲／購買</p>
+                <p class="text-xs text-zinc-500 mb-3">目標 14:50 抵達，停留至 16:15</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=片山酒造" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d3-2')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=片山酒造&destination=神橋+日光&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">片山酒造</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 10–15 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">神橋</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d3-3" data-search="神橋">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">神橋</h3>
+                    <span class="time-daytona tabular-nums shrink-0">16:30–16:50</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">市街紅葉 · 快速停留約 20 分鐘</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5">
+                        <a href="https://www.google.com/maps/search/?api=1&query=神橋+日光" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a>
+                    </div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d3-3')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=神橋+日光&destination=Gasthof+Ami&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">神橋</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 5–10 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">Gasthof Ami</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-hotel bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d3-4" data-search="Gasthof Ami">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">Gasthof Ami</h3>
+                    <span class="time-daytona tabular-nums shrink-0">17:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">Check-in</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=Gasthof+Ami+日光" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d3-4')">⬜ 完成</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-d4" class="tab-content hidden space-y-5 animate-fadeIn">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-semibold tracking-tight">Day 4 · Nov 09 (Mon)</h2>
+                    <p class="text-sm text-zinc-500 mt-0.5">半月山 → 龍頭瀑 → 中禪寺湖 → 華嚴滝 → 戰場平原 → 鬼怒川</p>
+                </div>
+                <div class="flex items-start gap-2.5 shrink-0">
+                    <div class="drive-today-box">Today Driving: ~120 km</div>
+                    <div class="text-right text-xs text-zinc-400 shrink-0">日光 🍁<br>—</div>
+                </div>
+            </div>
+            <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200/60 rounded-xl p-4 text-sm">📌 <strong>今日亮點：</strong>半月山展望台看晨景，酒店早餐後遊龍頭瀑布，中禪寺湖畔午餐（三選一），華嚴滝、戰場平原木棧道，直去鬼怒川 VILLA。</div>
+
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d4-1" data-search="出發前往半月山展望台">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">出發前往半月山展望台</h3>
+                    <span class="time-daytona tabular-nums shrink-0">06:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">由酒店出發</p>
+                <div class="flex flex-wrap justify-end items-center gap-2">
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-1')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=Gasthof+Ami&destination=半月山展望台&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">Gasthof Ami</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 40–60 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">半月山展望台</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-2" data-search="半月山展望台">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">半月山展望台</h3>
+                    <span class="time-daytona tabular-nums shrink-0">06:40–07:30</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">觀景 · 停留約 50 分鐘</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=半月山展望台" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-2')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=半月山展望台&destination=Gasthof+Ami&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">半月山展望台</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 40–60 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">Gasthof Ami</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-hotel bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-3" data-search="Gasthof Ami 早餐">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">返回酒店食早餐</h3>
+                    <span class="time-daytona tabular-nums shrink-0">08:15</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">Gasthof Ami</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=Gasthof+Ami+日光" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-3')">⬜ 完成</button>
+                </div>
+            </div>
+                        <div class="card-item box-hotel bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-3b" data-search="Gasthof Ami Check-out">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">Gasthof Ami Check-out</h3>
+                    <span class="time-daytona tabular-nums shrink-0">10:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">早餐後退房，出發前往龍頭瀑布</p>
+                <div class="flex flex-wrap justify-end items-center gap-2">
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-3b')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=Gasthof+Ami&destination=龍頭瀑布&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">Gasthof Ami</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 40–50 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">龍頭瀑布</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-4" data-search="龍頭瀑布">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">龍頭瀑布</h3>
+                    <span class="time-daytona tabular-nums shrink-0">10:40–11:10</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">觀瀑 · 停留約 30 分鐘</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=龍頭の滝" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-4')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=龍頭の滝&destination=中禅寺湖+ボートハウス&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">龍頭瀑布</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 5–10 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">中禪寺湖畔ボートハウス</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-4b" data-search="中禪寺湖畔ボートハウス">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">中禪寺湖畔ボートハウス</h3>
+                    <span class="time-daytona tabular-nums shrink-0">11:20–11:50</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">湖景 · 停留約 30 分鐘</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=中禅寺湖+ボートハウス" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-4b')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=中禅寺湖+ボートハウス&destination=欧州浪漫館+シェ・ホシノ&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">ボートハウス</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 5–10 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">浪漫館</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-resto bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-5" data-search="午餐 浪漫館 トンカツ浅井 ボートハウス">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">午餐 · 三選一</h3>
+                    <span class="time-daytona tabular-nums shrink-0">12:00–13:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-2">停留約 1 小時 · 中禪寺湖一帶</p>
+                <div class="text-sm space-y-1.5 mb-3">
+                    <p>1. <strong>浪漫館 シェ・ホシノ</strong> · 湖景法餐<br><a href="https://tabelog.com/tochigi/A0903/A090301/9002995/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">Tabelog ↗</a> <a href="https://www.google.com/maps/search/?api=1&query=欧州浪漫館+シェ・ホシノ" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">Map ↗</a></p>
+                    <p>2. <strong>トンカツ 浅井</strong> · 精肉店直營<br><a href="https://tabelog.com/tochigi/A0903/A090301/9003209/" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">Tabelog ↗</a> <a href="https://www.google.com/maps/search/?api=1&query=トンカツ+浅井+中宮祠" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">Map ↗</a></p>
+                    <p>3. <strong>中禪寺湖畔ボートハウス</strong> · 湖景<br><a href="https://www.google.com/maps/search/?api=1&query=中禅寺湖+ボートハウス" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">Map ↗</a></p>
+                </div>
+                <div class="flex flex-wrap justify-end items-center gap-2">
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-5')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=欧州浪漫館+シェ・ホシノ&destination=華厳の滝&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">午餐</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 5–10 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">華嚴滝</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-6" data-search="華嚴滝">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">華嚴滝</h3>
+                    <span class="time-daytona tabular-nums shrink-0">13:10–13:40</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">觀瀑 · 停留約 30 分鐘</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=華厳の滝" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-6')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=華厳の滝&destination=戦場ヶ原&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">華嚴滝</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 15–20 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">戰場平原</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-7" data-search="戰場平原木棧道">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">戰場平原木棧道</h3>
+                    <span class="time-daytona tabular-nums shrink-0">14:00–15:45</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">木棧道散步 · 停留約 1 小時 15 分（濕原紅葉，建議放慢行）</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=戦場ヶ原" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-7')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=戦場ヶ原&destination=リオン・ドール+鬼怒川店&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">戰場平原</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 50–65 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">リオン・ドール 鬼怒川店</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d4-8" data-search="リオン・ドール 鬼怒川店">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">リオン・ドール 鬼怒川店</h3>
+                    <span class="time-daytona tabular-nums shrink-0">約 16:40–17:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">超市買餸／酒／零食 · 停留約 15–20 分鐘</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=リオン・ドール+鬼怒川店" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-8')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=リオン・ドール+鬼怒川店&destination=楽天+STAY+VILLA+鬼怒川&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">超市</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 3–5 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">樂天住宿 VILLA</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+                        <div class="card-item box-hotel bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d4-9" data-search="樂天住宿 VILLA 鬼怒川河畔">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">樂天住宿 VILLA 鬼怒川河畔</h3>
+                    <span class="time-daytona tabular-nums shrink-0">約 17:05–17:15</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">Check-in</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=楽天+STAY+VILLA+鬼怒川" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d4-9')">⬜ 完成</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-d5" class="tab-content hidden space-y-5 animate-fadeIn">
+            <div class="flex items-start justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-semibold tracking-tight">Day 5 · Nov 10 (Tue)</h2>
+                    <p class="text-sm text-zinc-500 mt-0.5">東照宮 → 鬼怒盾岩大橋 → 成田還車</p>
+                </div>
+                <div class="flex items-start gap-2.5 shrink-0">
+                    <div class="drive-today-box">Today Driving: ~200 km</div>
+                    <div class="text-right text-xs text-zinc-400 shrink-0">日光 🍁<br>—</div>
+                </div>
+            </div>
+            <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200/60 rounded-xl p-4 text-sm">📌 <strong>今日亮點：</strong>東照宮建築主力，鬼怒盾岩大橋觀景，之後自駕前往成田還車。</div>
+
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d5-1" data-search="由鬼怒川出發去東照宮">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">由鬼怒川出發去東照宮</h3>
+                    <span class="time-daytona tabular-nums shrink-0">09:30</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">由樂天住宿 VILLA 出發</p>
+                <div class="flex flex-wrap justify-end items-center gap-2">
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d5-1')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=楽天+STAY+VILLA+鬼怒川&destination=日光東照宮&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">鬼怒川</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 25–35 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">東照宮</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d5-2" data-search="東照宮">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">東照宮</h3>
+                    <span class="time-daytona tabular-nums shrink-0">約 10:00–11:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">建築主力 · 停留約 1 小時</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=日光東照宮" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d5-2')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=日光東照宮&destination=鬼怒盾岩大橋&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">東照宮</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 25–35 分鐘</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">鬼怒盾岩大橋</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item box-sight bg-white dark:bg-zinc-900/40 border p-5 rounded-2xl" data-id="d5-3" data-search="鬼怒盾岩大橋">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">鬼怒盾岩大橋</h3>
+                    <span class="time-daytona tabular-nums shrink-0">11:25–11:50</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-3">觀景 · 停留約 25 分鐘</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=鬼怒盾岩大橋" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d5-3')">⬜ 完成</button>
+                </div>
+            </div>
+            <a href="https://www.google.com/maps/dir/?api=1&origin=鬼怒盾岩大橋&destination=成田空港+レンタカー&travelmode=driving" target="_blank" class="block group bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-700 hover:border-[#0070C0]/60 rounded-xl px-4 py-3.5 transition-all">
+                <div class="flex items-center gap-2.5">
+                    <span class="route-dot"></span>
+                    <span class="text-sm font-medium text-zinc-600 dark:text-zinc-300 truncate max-w-[32%]">鬼怒盾岩大橋</span>
+                    <div class="flex-1 min-w-[56px] flex flex-col items-center justify-center px-1">
+                        <span class="route-meta">約 2 小時 40 分–3 小時</span>
+                        <span class="route-track"><span class="route-shaft"></span><span class="route-head"></span></span>
+                    </div>
+                    <span class="text-sm font-medium text-zinc-800 dark:text-zinc-100 truncate max-w-[32%] text-right">成田還車</span>
+                    <span class="route-dot"></span>
+                </div>
+            </a>
+            <div class="card-item bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl" data-id="d5-4" data-search="成田還車">
+                <div class="flex justify-between items-start gap-3 mb-2">
+                    <h3 class="font-bold text-base leading-snug pr-2">成田還車</h3>
+                    <span class="time-daytona tabular-nums shrink-0">16:00</span>
+                </div>
+                <p class="text-sm text-zinc-500 mb-1">約 12:00 出發 · 目標 16:00 還車</p>
+                <p class="text-xs text-zinc-500 mb-3">成田</p>
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <div class="flex flex-wrap gap-1.5"><a href="https://www.google.com/maps/search/?api=1&query=成田空港+レンタカー" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">Map ↗</a></div>
+                    <button class="check-btn text-xs font-semibold px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-700" onclick="toggleComplete(this,'d5-4')">⬜ 完成</button>
+                </div>
+            </div>
+        </div>
+
+</main>
+
+    <footer class="max-w-3xl mx-auto w-full px-4 sm:px-6 py-8 text-center text-xs text-zinc-400 border-t border-zinc-200 dark:border-zinc-800 mt-4">
+        Nikko Autumn Trip · Nov 06 – Nov 10
+    </footer>
+    <script>
+        const STORAGE_KEY = 'nikko_trip_state_v1';
+        let state = { completed: {}, paid: {}, currentTab: 'hotels', subs: {} };
+        const html = document.documentElement;
+        function applyTheme(dark) {
+            html.classList.toggle('dark', dark);
+            html.classList.toggle('light', !dark);
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+        function toggleTheme() { applyTheme(!html.classList.contains('dark')); }
+        applyTheme(localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && matchMedia('(prefers-color-scheme: dark)').matches));
+
+        const DAY_SUBS = {};
+        const TAB_ALIAS = {};
+        function switchDaySub(day, sub) {
+            (DAY_SUBS[day] || []).forEach(s => {
+                const el = document.getElementById('sub-' + s);
+                if (el) el.classList.toggle('hidden', s !== sub);
+            });
+            const wrap = document.getElementById('content-' + day);
+            if (wrap) wrap.querySelectorAll('.sub-tab-btn').forEach(btn => {
+                btn.classList.toggle('on', btn.getAttribute('data-sub') === sub);
+            });
+            if (!state.subs) state.subs = {};
+            state.subs[day] = sub;
+            saveState();
+        }
+        function switchTab(id) {
+            if (TAB_ALIAS[id]) {
+                const day = TAB_ALIAS[id];
+                const sub = id;
+                id = day;
+                if (!state.subs) state.subs = {};
+                state.subs[day] = sub;
+            }
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const t = document.getElementById('content-' + id);
+            if (t) t.classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                const on = btn.id === 'tab-' + id;
+                btn.classList.toggle('border-brand-accent', on);
+                btn.classList.toggle('text-zinc-900', on);
+                btn.classList.toggle('dark:text-white', on);
+                btn.classList.toggle('border-transparent', !on);
+                btn.classList.toggle('text-zinc-400', !on);
+            });
+            if (DAY_SUBS[id]) {
+                const sub = (state.subs && state.subs[id]) || DAY_SUBS[id][0];
+                switchDaySub(id, sub);
+            }
+            const active = document.getElementById('tab-' + id);
+            if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            state.currentTab = id; saveState();
+            updateTabScrollBtns();
+        }
+        function scrollTabBar(dir) {
+            const el = document.getElementById('tabScroll');
+            if (!el) return;
+            el.scrollBy({ left: dir * Math.max(160, el.clientWidth * 0.7), behavior: 'smooth' });
+        }
+        function updateTabScrollBtns() {
+            const el = document.getElementById('tabScroll');
+            const left = document.getElementById('tabScrollLeft');
+            const right = document.getElementById('tabScrollRight');
+            if (!el || !left || !right) return;
+            const max = el.scrollWidth - el.clientWidth - 2;
+            left.disabled = el.scrollLeft <= 2;
+            right.disabled = el.scrollLeft >= max;
+        }
+        function initTabScroll() {
+            const el = document.getElementById('tabScroll');
+            if (!el) return;
+            el.addEventListener('scroll', updateTabScrollBtns, { passive: true });
+            el.addEventListener('wheel', function (e) {
+                if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+                e.preventDefault();
+                el.scrollLeft += e.deltaY;
+            }, { passive: false });
+            window.addEventListener('resize', updateTabScrollBtns);
+            updateTabScrollBtns();
+        }
+        function toggleComplete(btn, id) {
+            state.completed[id] = !state.completed[id];
+            const card = btn.closest('.card-item');
+            card.classList.toggle('card-completed', !!state.completed[id]);
+            btn.textContent = state.completed[id] ? '✓ 完成' : '⬜ 完成';
+            saveState(); updateProgress();
+        }
+        function togglePaid(btn, id) {
+            state.paid[id] = !state.paid[id];
+            const status = btn.closest('.card-item').querySelector('.pay-status');
+            btn.textContent = state.paid[id] ? '✓ 已付' : '💳 標記已付';
+            if (status) {
+                status.textContent = state.paid[id] ? '已付款' : '未付款';
+                status.classList.toggle('text-emerald-600', !!state.paid[id]);
+                status.classList.toggle('text-amber-600', !state.paid[id]);
+            }
+            saveState(); updateHotelTotals();
+        }
+        function updateProgress() {
+            const cards = document.querySelectorAll('.card-item[data-id]');
+            const n = cards.length || 1;
+            const done = Object.values(state.completed).filter(Boolean).length;
+            const pct = Math.round(done / n * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = pct + '%';
+        }
+        function updateHotelTotals() {
+            let total = 0, unpaid = 0;
+            document.querySelectorAll('[data-cost]').forEach(card => {
+                const cost = parseInt(card.getAttribute('data-cost') || '0', 10);
+                total += cost;
+                const id = card.getAttribute('data-id');
+                if (!state.paid[id]) unpaid += cost;
+            });
+            document.getElementById('hotelTotalDisplay').textContent = '¥' + total.toLocaleString();
+            document.getElementById('hotelUnpaidDisplay').textContent = '¥' + unpaid.toLocaleString();
+        }
+        function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+        function loadState() {
+            try { const s = localStorage.getItem(STORAGE_KEY); if (s) state = Object.assign(state, JSON.parse(s)); } catch(e) {}
+            document.querySelectorAll('.card-item[data-id]').forEach(card => {
+                const id = card.getAttribute('data-id');
+                if (state.completed[id]) {
+                    card.classList.add('card-completed');
+                    const btn = card.querySelector('.check-btn');
+                    if (btn) btn.textContent = '✓ 完成';
+                }
+                if (state.paid[id]) {
+                    const btn = card.querySelector('.paid-btn');
+                    const status = card.querySelector('.pay-status');
+                    if (btn) btn.textContent = '✓ 已付';
+                    if (status) { status.textContent = '已付款'; status.classList.remove('text-amber-600'); status.classList.add('text-emerald-600'); }
+                }
+            });
+            updateProgress(); updateHotelTotals();
+            if (state.currentTab) switchTab(state.currentTab);
+        }
+        function handleSearch() {
+            const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+            document.querySelectorAll('.card-item').forEach(card => {
+                const hay = ((card.getAttribute('data-search') || '') + ' ' + card.textContent).toLowerCase();
+                card.style.display = (!q || hay.includes(q)) ? '' : 'none';
+            });
+        }
+
+        const WX_CACHE = 'nikko_wx_cache_v1';
+        const WX_LOCS = {
+            hkg: { name: 'Hong Kong', jp: '香港', lat: 22.3193, lon: 114.1694, tenki: 'https://www.hko.gov.hk/en/wxinfo/currwx/current.htm', tenkiLabel: 'HKO ↗' },
+            shinjuku: { name: 'Shinjuku', jp: '新宿', lat: 35.6938, lon: 139.7034, tenki: 'https://tenki.jp/forecast/3/16/4410/13104/10days.html', tenkiLabel: 'tenki.jp ↗' },
+            aoyama: { name: 'Aoyama', jp: '青山', lat: 35.6654, lon: 139.7120, tenki: 'https://tenki.jp/forecast/3/16/4410/13103/10days.html', tenkiLabel: 'tenki.jp ↗' },
+            matsudo: { name: 'Matsudo', jp: '松戶', lat: 35.787, lon: 139.903, tenki: 'https://tenki.jp/forecast/3/15/4510/12207/10days.html', tenkiLabel: 'tenki.jp ↗' },
+            nikko: { name: 'Nikko', jp: '日光', lat: 36.750, lon: 139.599, tenki: 'https://tenki.jp/lite/forecast/3/12/4120/9206/', tenkiLabel: 'tenki.jp ↗' }
+        };
+        const WX_DAYS = [
+            { date: '2026-11-06', label: 'Nov 06 (Fri) · D1', loc: 'shinjuku', note: '新宿伊勢丹 → 羅浮宮展 → 中目黑' },
+            { date: '2026-11-07', label: 'Nov 07 (Sat) · D2', loc: 'aoyama', note: '羅浮宮展 → 南青山 → 新宿伊勢丹' },
+            { date: '2026-11-08', label: 'Nov 08 (Sun) · D3', loc: 'nikko', note: '片山酒造 → 神橋 → Gasthof Ami' },
+            { date: '2026-11-09', label: 'Nov 09 (Mon) · D4', loc: 'nikko', note: '半月山 → 華嚴滝 → 戰場平原 → 鬼怒川' },
+            { date: '2026-11-10', label: 'Nov 10 (Tue) · D5', loc: 'nikko', note: '東照宮 → 鬼怒盾岩大橋 → 成田' }
+        ];
+
+        function wxIcon(code) {
+            const c = Number(code);
+            const sun = '<circle cx="26" cy="26" r="10" fill="#FBBF24"/><g stroke="#FBBF24" stroke-width="3" stroke-linecap="round"><line x1="26" y1="4" x2="26" y2="10"/><line x1="26" y1="42" x2="26" y2="48"/><line x1="4" y1="26" x2="10" y2="26"/><line x1="42" y1="26" x2="48" y2="26"/><line x1="10" y1="10" x2="14" y2="14"/><line x1="38" y1="38" x2="42" y2="42"/><line x1="38" y1="14" x2="42" y2="10"/><line x1="10" y1="42" x2="14" y2="38"/></g>';
+            const cloud = '<ellipse cx="28" cy="32" rx="14" ry="9" fill="#94A3B8"/><ellipse cx="18" cy="33" rx="10" ry="7" fill="#CBD5E1"/>';
+            const rain = cloud + '<g stroke="#3B82F6" stroke-width="2.4" stroke-linecap="round"><line x1="16" y1="44" x2="14" y2="50"/><line x1="24" y1="44" x2="22" y2="50"/><line x1="32" y1="44" x2="30" y2="50"/></g>';
+            const snow = cloud + '<g fill="#7DD3FC" font-size="9"><text x="14" y="50">❄</text><text x="24" y="50">❄</text><text x="34" y="50">❄</text></g>';
+            const storm = rain + '<path d="M30 22 L24 34 L30 34 L26 46 L38 30 L31 30 L36 22 Z" fill="#F59E0B"/>';
+            const fog = '<g stroke="#94A3B8" stroke-width="3" stroke-linecap="round"><line x1="8" y1="20" x2="44" y2="20"/><line x1="6" y1="28" x2="46" y2="28"/><line x1="10" y1="36" x2="42" y2="36"/></g>';
+            let inner = cloud;
+            if (c === 0) inner = sun;
+            else if (c <= 2) inner = sun + '<ellipse cx="34" cy="36" rx="11" ry="7" fill="#CBD5E1"/>';
+            else if (c === 3) inner = cloud;
+            else if (c >= 45 && c <= 48) inner = fog;
+            else if (c >= 71 && c <= 77) inner = snow;
+            else if (c >= 95) inner = storm;
+            else if (c >= 51) inner = rain;
+            return `<svg class="wx-icon" viewBox="0 0 52 52" aria-hidden="true">${inner}</svg>`;
+        }
+        function wxRainClass(p) {
+            if (p == null || isNaN(p)) return 'wx-rain-low';
+            if (p > 70) return 'wx-rain-high';
+            if (p >= 40) return 'wx-rain-mid';
+            return 'wx-rain-low';
+        }
+        function wxWrap(json) { return Array.isArray(json) ? json : [json]; }
+        function wxIndex(daily, date) {
+            if (!daily || !daily.time) return -1;
+            return daily.time.indexOf(date);
+        }
+        function wxPick(daily, i, key) {
+            if (i < 0 || !daily || !daily[key]) return null;
+            const v = daily[key][i];
+            return v == null ? null : v;
+        }
+        function wxMd(date) { return date.slice(5); } // MM-DD
+        async function wxGetJson(url) {
+            const r = await fetch(url);
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+        }
+        function wxDayLocIds(d) {
+            if (d.locs && d.locs.length) return d.locs;
+            return d.loc ? [d.loc] : [];
+        }
+        function wxLocList() {
+            const seen = new Set();
+            const list = [];
+            WX_DAYS.forEach(d => {
+                wxDayLocIds(d).forEach(id => {
+                    if (!seen.has(id) && WX_LOCS[id]) { seen.add(id); list.push({ id, ...WX_LOCS[id] }); }
+                });
+            });
+            return list;
+        }
+        function wxDirLabel(deg) {
+            if (deg == null || isNaN(deg)) return null;
+            const dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+            const i = Math.round(((deg % 360) + 360) % 360 / 22.5) % 16;
+            return dirs[i];
+        }
+        function wxPointFromMaps(date, locId, liveMap, analog) {
+            const loc = WX_LOCS[locId];
+            const liveDaily = liveMap[locId];
+            const li = liveDaily ? wxIndex(liveDaily, date) : -1;
+            const liveOk = li >= 0 && wxPick(liveDaily, li, 'temperature_2m_max') != null;
+            if (liveOk) {
+                const tmax = wxPick(liveDaily, li, 'temperature_2m_max');
+                const tmin = wxPick(liveDaily, li, 'temperature_2m_min');
+                const amax = wxPick(liveDaily, li, 'apparent_temperature_max');
+                const amin = wxPick(liveDaily, li, 'apparent_temperature_min');
+                const pop = wxPick(liveDaily, li, 'precipitation_probability_max');
+                const code = wxPick(liveDaily, li, 'weather_code');
+                const wspeed = wxPick(liveDaily, li, 'wind_speed_10m_max');
+                const wdir = wxPick(liveDaily, li, 'wind_direction_10m_dominant');
+                const feels = (amax != null && amin != null) ? Math.round((amax + amin) / 2) : (amax != null ? Math.round(amax) : null);
+                return {
+                    locInfo: loc, source: 'live',
+                    tmax: Math.round(tmax), tmin: Math.round(tmin), feels,
+                    pop: pop == null ? null : Math.round(pop), code,
+                    windSpeed: wspeed == null ? null : Math.round(wspeed),
+                    windDir: wdir == null ? null : Math.round(wdir),
+                    windDirLabel: wxDirLabel(wdir)
+                };
+            }
+            const b = (analog[locId] || {})[wxMd(date)];
+            if (!b || !b.n) return { locInfo: loc, source: 'none' };
+            const avg = arr => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null;
+            const tmax = avg(b.tmax), tmin = avg(b.tmin), amax = avg(b.amax), amin = avg(b.amin);
+            const feels = (amax != null && amin != null) ? Math.round((amax + amin) / 2) : null;
+            const mode = b.code.slice().sort((a, z) => b.code.filter(x => x === z).length - b.code.filter(x => x === a).length)[0];
+            const windSpeed = avg(b.wspeed);
+            const windDir = avg(b.wdir);
+            return {
+                locInfo: loc, source: 'climate',
+                tmax: tmax == null ? null : Math.round(tmax), tmin: tmin == null ? null : Math.round(tmin),
+                feels, pop: Math.round(100 * b.rain / b.n), code: mode,
+                windSpeed: windSpeed == null ? null : Math.round(windSpeed),
+                windDir: windDir == null ? null : Math.round(windDir),
+                windDirLabel: wxDirLabel(windDir)
+            };
+        }
+        async function loadWeather(force) {
+            const btn = document.getElementById('wxRefreshBtn');
+            const meta = document.getElementById('wxMeta');
+            const list = document.getElementById('wxList');
+            if (!force) {
+                try {
+                    const cached = JSON.parse(sessionStorage.getItem(WX_CACHE) || 'null');
+                    if (cached && cached.at && Date.now() - cached.at < 30 * 60 * 1000) {
+                        renderWeather(cached.days, cached.at, cached.mode);
+                        loadNearWeather(false);
+                        return;
+                    }
+                } catch (e) {}
+            }
+            if (btn) btn.classList.add('spinning');
+            meta.textContent = 'Refreshing forecast…';
+            try {
+                const locs = wxLocList();
+                const lats = locs.map(l => l.lat).join(',');
+                const lons = locs.map(l => l.lon).join(',');
+                const dailyVars = 'weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_probability_max,precipitation_sum,wind_speed_10m_max,wind_direction_10m_dominant';
+                let liveMap = {};
+                try {
+                    const live = await wxGetJson(`https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&daily=${dailyVars}&timezone=Asia%2FTokyo&forecast_days=16`);
+                    wxWrap(live).forEach((block, i) => { liveMap[locs[i].id] = block.daily; });
+                } catch (e) { liveMap = {}; }
+
+                const years = [2021, 2022, 2023, 2024, 2025];
+                const analogBlocks = await Promise.all(years.map(y =>
+                    wxGetJson(`https://archive-api.open-meteo.com/v1/archive?latitude=${lats}&longitude=${lons}&start_date=${y}-11-06&end_date=${y}-11-10&daily=${dailyVars}&timezone=Asia%2FTokyo`).catch(() => null)
+                ));
+
+                const analog = {};
+                locs.forEach((loc, li) => {
+                    analog[loc.id] = {};
+                    analogBlocks.forEach((block) => {
+                        if (!block) return;
+                        const daily = wxWrap(block)[li] && wxWrap(block)[li].daily;
+                        if (!daily) return;
+                        daily.time.forEach((t, idx) => {
+                            const md = wxMd(t);
+                            if (!analog[loc.id][md]) analog[loc.id][md] = { tmax: [], tmin: [], amax: [], amin: [], code: [], wspeed: [], wdir: [], rain: 0, n: 0 };
+                            const b = analog[loc.id][md];
+                            const tmax = daily.temperature_2m_max[idx];
+                            const tmin = daily.temperature_2m_min[idx];
+                            const amax = daily.apparent_temperature_max[idx];
+                            const amin = daily.apparent_temperature_min[idx];
+                            const code = daily.weather_code[idx];
+                            const precip = daily.precipitation_sum[idx];
+                            const wspeed = daily.wind_speed_10m_max && daily.wind_speed_10m_max[idx];
+                            const wdir = daily.wind_direction_10m_dominant && daily.wind_direction_10m_dominant[idx];
+                            if (tmax != null) b.tmax.push(tmax);
+                            if (tmin != null) b.tmin.push(tmin);
+                            if (amax != null) b.amax.push(amax);
+                            if (amin != null) b.amin.push(amin);
+                            if (code != null) b.code.push(code);
+                            if (wspeed != null) b.wspeed.push(wspeed);
+                            if (wdir != null) b.wdir.push(wdir);
+                            b.n += 1;
+                            if (precip != null && precip >= 1) b.rain += 1;
+                        });
+                    });
+                });
+
+                const days = WX_DAYS.map(d => {
+                    const ids = wxDayLocIds(d);
+                    const points = ids.map(id => wxPointFromMaps(d.date, id, liveMap, analog));
+                    return { ...d, points };
+                });
+                const at = Date.now();
+                sessionStorage.setItem(WX_CACHE, JSON.stringify({ days, at, mode: 'ok' }));
+                renderWeather(days, at, 'ok');
+                loadNearWeather(force);
+            } catch (err) {
+                meta.textContent = '無法更新天氣預報：' + (err && err.message ? err.message : err);
+                if (!list.innerHTML) {
+                    list.innerHTML = WX_DAYS.map(d => {
+                        const names = wxDayLocIds(d).map(id => WX_LOCS[id] && WX_LOCS[id].jp).filter(Boolean).join(' / ');
+                        return `<div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 flex justify-between items-center">
+                            <div><p class="font-bold">${d.label}</p><p class="text-sm text-zinc-500">${names}</p></div>
+                        </div>`;
+                    }).join('');
+                }
+                loadNearWeather(force);
+            } finally {
+                if (btn) btn.classList.remove('spinning');
+            }
+        }
+        function wxBadge(source) {
+            if (source === 'live') return '<span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Live</span>';
+            if (source === 'climate') return '<span class="text-[10px] font-bold uppercase tracking-wider text-zinc-500 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">2021–25 typical</span>';
+            return '<span class="text-[10px] font-bold uppercase tracking-wider text-zinc-400">N/A</span>';
+        }
+        function wxPointStats(p) {
+            const rain = p.pop == null ? '—' : p.pop + '%';
+            const feels = p.feels == null ? '—' : p.feels + '°';
+            const tmax = p.tmax == null ? '—' : p.tmax + '°';
+            const tmin = p.tmin == null ? '—' : p.tmin + '°';
+            return { rain, feels, tmax, tmin };
+        }
+        function wxWindLine(p) {
+            if (!p || p.windSpeed == null) return '';
+            const dir = p.windDirLabel || (p.windDir != null ? p.windDir + '°' : '—');
+            return `<div class="mt-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center gap-2 text-sm">
+                <span class="text-[10px] uppercase tracking-wider text-zinc-400 shrink-0">Wind</span>
+                <span class="font-bold tabular-nums">${p.windSpeed} km/h</span>
+                <span class="text-zinc-400">·</span>
+                <span class="font-semibold text-sky-700 dark:text-sky-400">${dir}</span>
+                ${p.windDir != null ? `<span class="text-xs text-zinc-400">(${p.windDir}°)</span>` : ''}
+            </div>`;
+        }
+        function renderWxPointCol(p, showWind) {
+            const loc = p.locInfo || {};
+            const s = wxPointStats(p);
+            return `<div class="min-w-0">
+                <div class="flex items-start gap-2">
+                    ${wxIcon(p.code)}
+                    <div class="min-w-0 flex-1">
+                        <p class="font-bold text-sm">${loc.jp || ''} <span class="font-medium text-zinc-400">${loc.name || ''}</span></p>
+                        ${wxBadge(p.source)}
+                    </div>
+                    ${loc.tenki ? `<a href="${loc.tenki}" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-md shrink-0">${loc.tenkiLabel || '↗'}</a>` : ''}
+                </div>
+                <div class="mt-2 grid grid-cols-3 gap-1 items-end">
+                    <div>
+                        <p class="text-[10px] uppercase tracking-wider text-zinc-400">Min / Max</p>
+                        <p><span class="wx-tmin">${s.tmin}</span> <span class="text-zinc-300">/</span> <span class="wx-tmax">${s.tmax}</span></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] uppercase tracking-wider text-zinc-400">Feels</p>
+                        <p class="wx-feels">${s.feels}</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] uppercase tracking-wider text-zinc-400">Rain</p>
+                        <p class="font-extrabold text-lg tabular-nums ${wxRainClass(p.pop)}">${s.rain}</p>
+                    </div>
+                </div>
+                ${showWind ? wxWindLine(p) : ''}
+            </div>`;
+        }
+        function renderWeather(days, at, mode) {
+            const meta = document.getElementById('wxMeta');
+            const list = document.getElementById('wxList');
+            const when = at ? new Date(at).toLocaleString('zh-HK', { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }) : '';
+            const liveN = days.reduce((n, d) => n + ((d.points || []).filter(p => p.source === 'live').length), 0);
+            meta.textContent = `Last refresh ${when}` + (liveN ? ` · ${liveN} 地點 live forecast` : ' · 行程尚在 16 日預報窗外，顯示氣候參考');
+            const tokyoLocs = new Set(['tokyo','yokohama','aoyama']);
+            const hkgLocs = new Set(['hkg']);
+            list.innerHTML = days.map(d => {
+                const points = d.points && d.points.length ? d.points : [d];
+                const showWind = !!d.showWind;
+                const keys = (d.locs && d.locs.length ? d.locs : [d.loc]).filter(Boolean);
+                const isTokyo = keys.some(k => tokyoLocs.has(k));
+                const isHkg = keys.some(k => hkgLocs.has(k));
+                const regionClass = isTokyo ? 'box-book-tokyo relative wx-card-tokyo' : (isHkg ? '' : 'box-book-hokkaido');
+                const tokyoStamp = isTokyo ? '<span class="wx-tokyo-stamp">TOKYO</span>' : '';
+                if (points.length > 1) {
+                    return `<div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 ${regionClass}">
+                        ${tokyoStamp}
+                        <div class="mb-3">
+                            <p class="font-bold">${d.label}</p>
+                            <p class="text-xs text-zinc-400">${d.note || ''}</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:divide-x sm:divide-zinc-200 dark:sm:divide-zinc-700">
+                            ${points.map(p => `<div class="sm:px-3 first:sm:pl-0 last:sm:pr-0">${renderWxPointCol(p, showWind)}</div>`).join('')}
+                        </div>
+                    </div>`;
+                }
+                const p = points[0];
+                const loc = p.locInfo || {};
+                const s = wxPointStats(p);
+                return `<div class="bg-white dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 ${regionClass}">
+                    ${tokyoStamp}
+                    <div class="flex items-start gap-3">
+                        ${wxIcon(p.code)}
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <p class="font-bold">${d.label}</p>
+                                ${wxBadge(p.source)}
+                            </div>
+                            <p class="text-sm text-zinc-600 dark:text-zinc-300">${loc.jp || ''} · ${loc.name || ''}</p>
+                            <p class="text-xs text-zinc-400">${d.note || ''}</p>
+                        </div>
+                        ${loc.tenki ? `<a href="${loc.tenki}" target="_blank" class="text-xs font-bold bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md shrink-0">${loc.tenkiLabel || '↗'}</a>` : ''}
+                    </div>
+                    <div class="mt-3 grid grid-cols-3 gap-2 items-end">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider text-zinc-400">Min / Max</p>
+                            <p><span class="wx-tmin">${s.tmin}</span> <span class="text-zinc-300">/</span> <span class="wx-tmax">${s.tmax}</span></p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider text-zinc-400">Feels like</p>
+                            <p class="wx-feels">${s.feels}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider text-zinc-400">Rain</p>
+                            <p class="font-extrabold text-lg tabular-nums ${wxRainClass(p.pop)}">${s.rain}</p>
+                        </div>
+                    </div>
+                    ${showWind ? wxWindLine(p) : ''}
+                </div>`;
+            }).join('');
+        }
+        const WX_NEAR_CACHE = 'hokkaido_wx_near_v1';
+        function renderNearHours(hours, place, at) {
+            const title = document.getElementById('wxNearTitle');
+            const meta = document.getElementById('wxNearMeta');
+            const list = document.getElementById('wxNearList');
+            title.textContent = place || '目前位置';
+            const when = at ? new Date(at).toLocaleString('zh-HK', { hour: '2-digit', minute: '2-digit' }) : '';
+            meta.textContent = (when ? `更新 ${when} · ` : '') + 'Open-Meteo · 未來 24 小時／每 3 小時';
+            list.innerHTML = hours.map(h => `
+                <div class="wx-hour-chip">
+                    <p class="text-[11px] font-bold text-zinc-500">${h.label}</p>
+                    <div class="flex justify-center my-1">${wxIcon(h.code)}</div>
+                    <p class="font-extrabold tabular-nums">${h.temp == null ? '—' : h.temp + '°'}</p>
+                    <p class="text-[11px] font-bold ${wxRainClass(h.pop)}">${h.pop == null ? '—' : h.pop + '%'}</p>
+                </div>`).join('');
+        }
+        async function loadNearWeather(force) {
+            const title = document.getElementById('wxNearTitle');
+            const meta = document.getElementById('wxNearMeta');
+            const list = document.getElementById('wxNearList');
+            if (!title || !list) return;
+            if (!force) {
+                try {
+                    const cached = JSON.parse(sessionStorage.getItem(WX_NEAR_CACHE) || 'null');
+                    if (cached && cached.at && Date.now() - cached.at < 20 * 60 * 1000 && cached.hours) {
+                        renderNearHours(cached.hours, cached.place, cached.at);
+                    }
+                } catch (e) {}
+            }
+            if (!navigator.geolocation) {
+                title.textContent = '無法使用定位';
+                meta.textContent = '此瀏覽器不支援 GPS';
+                return;
+            }
+            title.textContent = '正在偵測位置…';
+            const pos = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: false, timeout: 12000, maximumAge: 5 * 60 * 1000 });
+            }).catch(err => {
+                title.textContent = '未授權定位';
+                meta.textContent = (err && err.message ? err.message : '請允許位置權限後按「定位」') + ' · 或繼續看下方行程預報';
+                return null;
+            });
+            if (!pos) return;
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            try {
+                const data = await wxGetJson(`https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code&forecast_days=2&timezone=auto`);
+                const hourly = data.hourly || {};
+                const times = hourly.time || [];
+                const now = Date.now();
+                const picked = [];
+                for (let i = 0; i < times.length && picked.length < 8; i++) {
+                    const t = new Date(times[i]).getTime();
+                    if (t + 30 * 60 * 1000 < now) continue;
+                    const hour = new Date(times[i]).getHours();
+                    if (picked.length === 0 || hour % 3 === 0) {
+                        if (picked.length && hour % 3 !== 0) continue;
+                        picked.push({
+                            label: new Date(times[i]).toLocaleString('zh-HK', { hour: '2-digit', minute: '2-digit' }),
+                            temp: hourly.temperature_2m[i] == null ? null : Math.round(hourly.temperature_2m[i]),
+                            pop: hourly.precipitation_probability[i] == null ? null : Math.round(hourly.precipitation_probability[i]),
+                            code: hourly.weather_code[i]
+                        });
+                    }
+                }
+                if (!picked.length) {
+                    for (let i = 0; i < times.length && picked.length < 8; i++) {
+                        const t = new Date(times[i]).getTime();
+                        if (t + 30 * 60 * 1000 < now) continue;
+                        if (picked.length && (i % 3 !== 0)) continue;
+                        picked.push({
+                            label: new Date(times[i]).toLocaleString('zh-HK', { hour: '2-digit', minute: '2-digit' }),
+                            temp: hourly.temperature_2m[i] == null ? null : Math.round(hourly.temperature_2m[i]),
+                            pop: hourly.precipitation_probability[i] == null ? null : Math.round(hourly.precipitation_probability[i]),
+                            code: hourly.weather_code[i]
+                        });
+                    }
+                }
+                let place = lat.toFixed(3) + ', ' + lon.toFixed(3);
+                try {
+                    const geo = await wxGetJson(`https://geocoding-api.open-meteo.com/v1/search?latitude=${lat.toFixed(4)}&longitude=${lon.toFixed(4)}&count=1&language=zh`);
+                    // Open-Meteo search is name-based; try reverse via BigDataCloud (no key)
+                    const rev = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=zh`).then(r => r.ok ? r.json() : null).catch(() => null);
+                    if (rev) {
+                        place = [rev.locality || rev.city, rev.principalSubdivision, rev.countryName].filter(Boolean).slice(0, 2).join(' · ') || place;
+                    }
+                    void geo;
+                } catch (e) {}
+                const at = Date.now();
+                sessionStorage.setItem(WX_NEAR_CACHE, JSON.stringify({ hours: picked, place, at, lat, lon }));
+                renderNearHours(picked, place, at);
+            } catch (err) {
+                title.textContent = '小時預報載入失敗';
+                meta.textContent = err && err.message ? err.message : String(err);
+            }
+        }
+        window.onload = function () { loadState(); initTabScroll(); loadWeather(false); };
+    </script>
+</body>
+</html>
